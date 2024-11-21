@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using FinalProjectContProg.Data; // Ensure this namespace matches where your AppDbContext is located
+using FinalProjectContProg.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
