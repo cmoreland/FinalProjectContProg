@@ -29,4 +29,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Seed the database with initial data
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    AppDbContext.SeedData(context); // Call the SeedData method
+}
+
 app.Run();
