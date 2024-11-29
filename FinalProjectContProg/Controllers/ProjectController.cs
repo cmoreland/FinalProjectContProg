@@ -10,52 +10,54 @@ namespace FinalProjectContProg.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase
+    public class ProjectsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public TasksController(AppDbContext context)
+        public ProjectsController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Projects.Include(p => p.Tasks).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FinalProjectContProg.Models.Task>> GetTask(int id)
+        public async Task<ActionResult<Project>> GetProject(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var project = await _context.Projects
+                .Include(p => p.Tasks)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (task == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return Ok(task);
+            return project;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
+        public async Task<ActionResult<Project>> PostProject(Project project)
         {
-            _context.Tasks.Add(task);
+            _context.Projects.Add(project);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTask", new { id = task.Id }, task);
+            return CreatedAtAction("GetProject", new { id = project.Id }, project);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, Models.Task task)
+        public async Task<IActionResult> PutProject(int id, Project project)
         {
-            if (id != task.Id)
+            if (id != project.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(task).State = EntityState.Modified;
+            _context.Entry(project).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +65,7 @@ namespace FinalProjectContProg.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Tasks.Any(t => t.Id == id))
+                if (!_context.Projects.Any(p => p.Id == id))
                 {
                     return NotFound();
                 }
@@ -77,16 +79,18 @@ namespace FinalProjectContProg.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteProject(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var project = await _context.Projects
+                .Include(p => p.Tasks)
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (task == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(task);
+            _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
 
             return NoContent();

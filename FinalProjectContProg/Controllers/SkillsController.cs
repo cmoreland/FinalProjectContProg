@@ -10,52 +10,52 @@ namespace FinalProjectContProg.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase
+    public class SkillsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public TasksController(AppDbContext context)
+        public SkillsController(AppDbContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.Skills.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FinalProjectContProg.Models.Task>> GetTask(int id)
+        public async Task<ActionResult<Skill>> GetSkill(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var skill = await _context.Skills.FindAsync(id);
 
-            if (task == null)
+            if (skill == null)
             {
                 return NotFound();
             }
 
-            return Ok(task);
+            return skill;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
+        public async Task<ActionResult<Skill>> PostSkill(Skill skill)
         {
-            _context.Tasks.Add(task);
+            _context.Skills.Add(skill);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTask", new { id = task.Id }, task);
+            return CreatedAtAction("GetSkill", new { id = skill.Id }, skill);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, Models.Task task)
+        public async Task<IActionResult> PutSkill(int id, Skill skill)
         {
-            if (id != task.Id)
+            if (id != skill.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(task).State = EntityState.Modified;
+            _context.Entry(skill).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +63,7 @@ namespace FinalProjectContProg.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Tasks.Any(t => t.Id == id))
+                if (!_context.Skills.Any(s => s.Id == id))
                 {
                     return NotFound();
                 }
@@ -77,16 +77,16 @@ namespace FinalProjectContProg.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteSkill(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var skill = await _context.Skills.FindAsync(id);
 
-            if (task == null)
+            if (skill == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(task);
+            _context.Skills.Remove(skill);
             await _context.SaveChangesAsync();
 
             return NoContent();
