@@ -10,52 +10,56 @@ namespace FinalProjectContProg.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasksController : ControllerBase
+    public class TeamMembersController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public TasksController(AppDbContext context)
+        public TeamMembersController(AppDbContext context)
         {
             _context = context;
         }
 
+        // GET: api/TeamMembers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<TeamMember>>> GetTeamMembers()
         {
-            return await _context.Tasks.ToListAsync();
+            return await _context.TeamMembers.ToListAsync();
         }
 
+        // GET: api/TeamMembers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<FinalProjectContProg.Models.Task>> GetTask(int id)
+        public async Task<ActionResult<TeamMember>> GetTeamMember(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var teamMember = await _context.TeamMembers.FindAsync(id);
 
-            if (task == null)
+            if (teamMember == null)
             {
                 return NotFound();
             }
 
-            return Ok(task);
+            return teamMember;
         }
 
+        // POST: api/TeamMembers
         [HttpPost]
-        public async Task<ActionResult<Models.Task>> PostTask(Models.Task task)
+        public async Task<ActionResult<TeamMember>> PostTeamMember(TeamMember teamMember)
         {
-            _context.Tasks.Add(task);
+            _context.TeamMembers.Add(teamMember);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTask", new { id = task.Id }, task);
+            return CreatedAtAction("GetTeamMember", new { id = teamMember.Id }, teamMember);
         }
 
+        // PUT: api/TeamMembers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask(int id, Models.Task task)
+        public async Task<IActionResult> PutTeamMember(int id, TeamMember teamMember)
         {
-            if (id != task.Id)
+            if (id != teamMember.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(task).State = EntityState.Modified;
+            _context.Entry(teamMember).State = EntityState.Modified;
 
             try
             {
@@ -63,7 +67,7 @@ namespace FinalProjectContProg.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Tasks.Any(t => t.Id == id))
+                if (!_context.TeamMembers.Any(t => t.Id == id))
                 {
                     return NotFound();
                 }
@@ -76,17 +80,18 @@ namespace FinalProjectContProg.Controllers
             return NoContent();
         }
 
+        // DELETE: api/TeamMembers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteTeamMember(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            var teamMember = await _context.TeamMembers.FindAsync(id);
 
-            if (task == null)
+            if (teamMember == null)
             {
                 return NotFound();
             }
 
-            _context.Tasks.Remove(task);
+            _context.TeamMembers.Remove(teamMember);
             await _context.SaveChangesAsync();
 
             return NoContent();
