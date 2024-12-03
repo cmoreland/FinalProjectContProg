@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FinalProjectContProg.Models;
-using System.Collections.Generic;
 
 namespace FinalProjectContProg.Data
 {
