@@ -20,16 +20,14 @@ namespace FinalProjectContProg.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks()
+        public async Task<ActionResult<IEnumerable<Models.Task>>> GetTasks(int? id)
         {
-            return await _context.Tasks.ToListAsync();
-        }
+            if (id == null || id == 0)
+            {
+                return await _context.Tasks.Take(5).ToListAsync();
+            }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FinalProjectContProg.Models.Task>> GetTask(int id)
-        {
             var task = await _context.Tasks.FindAsync(id);
-
             if (task == null)
             {
                 return NotFound();
@@ -67,10 +65,8 @@ namespace FinalProjectContProg.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();

@@ -20,24 +20,20 @@ namespace FinalProjectContProg.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Project>>> GetProjects()
+        public async Task<ActionResult<IEnumerable<Project>>> GetProjects(int? id)
         {
-            return await _context.Projects.Include(p => p.Tasks).ToListAsync();
-        }
+            if (id == null || id == 0)
+            {
+                return await _context.Projects.Take(5).Include(p => p.Tasks).ToListAsync();
+            }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Project>> GetProject(int id)
-        {
-            var project = await _context.Projects
-                .Include(p => p.Tasks)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
+            var project = await _context.Projects.Include(p => p.Tasks).FirstOrDefaultAsync(p => p.Id == id);
             if (project == null)
             {
                 return NotFound();
             }
 
-            return project;
+            return Ok(project);
         }
 
         [HttpPost]
@@ -69,10 +65,8 @@ namespace FinalProjectContProg.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();
@@ -81,9 +75,7 @@ namespace FinalProjectContProg.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
-            var project = await _context.Projects
-                .Include(p => p.Tasks)
-                .FirstOrDefaultAsync(p => p.Id == id);
+            var project = await _context.Projects.Include(p => p.Tasks).FirstOrDefaultAsync(p => p.Id == id);
 
             if (project == null)
             {

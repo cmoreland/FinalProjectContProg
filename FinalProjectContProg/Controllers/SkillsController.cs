@@ -20,22 +20,20 @@ namespace FinalProjectContProg.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills()
+        public async Task<ActionResult<IEnumerable<Skill>>> GetSkills(int? id)
         {
-            return await _context.Skills.ToListAsync();
-        }
+            if (id == null || id == 0)
+            {
+                return await _context.Skills.Take(5).ToListAsync();
+            }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Skill>> GetSkill(int id)
-        {
             var skill = await _context.Skills.FindAsync(id);
-
             if (skill == null)
             {
                 return NotFound();
             }
 
-            return skill;
+            return Ok(skill);
         }
 
         [HttpPost]
@@ -67,10 +65,8 @@ namespace FinalProjectContProg.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+
+                throw;
             }
 
             return NoContent();
