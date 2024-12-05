@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FinalProjectContProg.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class SeedsFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,54 @@ namespace FinalProjectContProg.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TeamMembers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Colors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorOne = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorTwo = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorThree = table.Column<string>(type: "TEXT", nullable: false),
+                    ColorFour = table.Column<string>(type: "TEXT", nullable: false),
+                    TeamMemberId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Colors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Colors_TeamMembers_TeamMemberId",
+                        column: x => x.TeamMemberId,
+                        principalTable: "TeamMembers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Food",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Breakfast = table.Column<string>(type: "TEXT", nullable: false),
+                    Lunch = table.Column<string>(type: "TEXT", nullable: false),
+                    Snack = table.Column<string>(type: "TEXT", nullable: false),
+                    Dinner = table.Column<string>(type: "TEXT", nullable: false),
+                    TeamMemberId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Food", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Food_TeamMembers_TeamMemberId",
+                        column: x => x.TeamMemberId,
+                        principalTable: "TeamMembers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,6 +138,16 @@ namespace FinalProjectContProg.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Colors_TeamMemberId",
+                table: "Colors",
+                column: "TeamMemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Food_TeamMemberId",
+                table: "Food",
+                column: "TeamMemberId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Projects_TeamMemberId",
                 table: "Projects",
                 column: "TeamMemberId");
@@ -108,6 +166,12 @@ namespace FinalProjectContProg.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Colors");
+
+            migrationBuilder.DropTable(
+                name: "Food");
+
             migrationBuilder.DropTable(
                 name: "Skills");
 

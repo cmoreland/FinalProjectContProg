@@ -11,14 +11,86 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinalProjectContProg.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241203221303_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241205214144_SeedsFix")]
+    partial class SeedsFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.0");
+
+            modelBuilder.Entity("FinalProjectContProg.Models.Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ColorFour")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ColorOne")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ColorThree")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ColorTwo")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TeamMemberId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamMemberId");
+
+                    b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("FinalProjectContProg.Models.Food", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Breakfast")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dinner")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Lunch")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Snack")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TeamMemberId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TeamMemberId");
+
+                    b.ToTable("Food");
+                });
 
             modelBuilder.Entity("FinalProjectContProg.Models.Project", b =>
                 {
@@ -114,6 +186,26 @@ namespace FinalProjectContProg.Migrations
                     b.ToTable("TeamMembers");
                 });
 
+            modelBuilder.Entity("FinalProjectContProg.Models.Color", b =>
+                {
+                    b.HasOne("FinalProjectContProg.Models.TeamMember", "TeamMember")
+                        .WithMany("Colors")
+                        .HasForeignKey("TeamMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TeamMember");
+                });
+
+            modelBuilder.Entity("FinalProjectContProg.Models.Food", b =>
+                {
+                    b.HasOne("FinalProjectContProg.Models.TeamMember", null)
+                        .WithMany("Foods")
+                        .HasForeignKey("TeamMemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FinalProjectContProg.Models.Project", b =>
                 {
                     b.HasOne("FinalProjectContProg.Models.TeamMember", "TeamMember")
@@ -154,6 +246,10 @@ namespace FinalProjectContProg.Migrations
 
             modelBuilder.Entity("FinalProjectContProg.Models.TeamMember", b =>
                 {
+                    b.Navigation("Colors");
+
+                    b.Navigation("Foods");
+
                     b.Navigation("Projects");
 
                     b.Navigation("Skills");
