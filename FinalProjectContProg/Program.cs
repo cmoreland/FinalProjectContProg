@@ -1,26 +1,26 @@
 using Microsoft.EntityFrameworkCore;
 using FinalProjectContProg.Data;
 using FinalProjectContProg.Seeds;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 
-// Configure the database context to use SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Swagger/OpenAPI support
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApiDocument(config =>
+{
+    config.Title = "FinalProjectContProg API";
+    config.Description = "An API for managing team members, projects, skills, and tasks.";
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseOpenApi();
     app.UseSwaggerUI();
 }
 
@@ -28,17 +28,17 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-// Seed the database with initial data
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated(); // This will create the database if it doesn't exist
+    context.Database.EnsureCreated();
 
-    // Seed data if necessary
     TeamMemberSeed.Seed(context);
     ProjectSeed.Seed(context);
     SkillSeed.Seed(context);
     TaskSeed.Seed(context);
+    ColorsSeed.Seed(context);
+    FoodSeed.Seed(context);
 }
 
 app.Run();
