@@ -10,6 +10,18 @@ This project is an **ASP.NET Core MVC** application utilizing **Entity Framework
 - Supports relationships between entities.
 
 ---
+## How to Start the DB/Program
+
+### Make sure your code is up-to-date in VS Code terminal
+`dotnet ef database update --project FinalProjectContProg/FinalProjectContProg.csproj`
+
+### Then, run the application with
+`dotnet run --project FinalProjectContProg/FinalProjectContProg.csproj --environment Development`
+
+### In your browser, navigate to:
+### `http://localhost:5294/swagger/index.html#/`
+### This should show the available endpoints and documentation.
+--- 
 
 ## Project Structure
 
