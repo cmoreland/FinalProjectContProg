@@ -1,9 +1,9 @@
 # FinalProjectContProg
 
-This project is an **ASP.NET Core MVC** application utilizing **Entity Framework Core (EF Core)** to manage entities such as team members, projects, tasks, and skills. The project demonstrates CRUD operations and relational database modeling.
+This project is an **ASP.NET Core MVC** application utilizing **Entity Framework Core (EF Core)** to manage entities such as team members, projects, tasks, skills, colors, and foods. The project demonstrates CRUD operations and relational database modeling.
 
 ## Features
-- Manage **Team Members**, **Projects**, **Skills**, and **Tasks**.
+- Manage **Team Members**, **Projects**, **Skills**, **Tasks**, **Colors**, and **Foods**.
 - Implements **Entity Framework Core** for database interactions.
 - Organized using the **MVC (Model-View-Controller)** design pattern.
 - Migration and database setup included.
@@ -25,6 +25,12 @@ Handles HTTP requests and provides endpoints for CRUD operations.
 - **`TeamMembersController.cs`**
   Handles CRUD operations for `TeamMember` entities.
 
+- **`ColorsController.cs`**
+  Handles CRUD operations for `Color` entities.
+
+- **`FoodsController.cs`**
+  Handles CRUD operations for `Food` entities.
+
 ### `Data/`
 Contains the EF Core database context.
 
@@ -44,7 +50,13 @@ Defines the data models and relationships.
   Represents a task entity. Relates to `Project`.
 
 - **`TeamMember.cs`**
-  Represents a team member entity. Relates to `Project` and `Skill`.
+  Represents a team member entity. Relates to `Project`, `Skill`, `Color`, and `Food`.
+
+- **`Color.cs`**
+  Represents a color entity. Relates to `TeamMember`.
+
+- **`Food.cs`**
+  Represents a food entity. Relates to `TeamMember`.
 
 ### `Migrations/`
 Contains EF Core migration files to track database schema changes.
@@ -57,40 +69,59 @@ Contains EF Core migration files to track database schema changes.
 ## Entity Relationships
 
 The project uses a relational database with the following entity relationships:
-1. A `TeamMember` can have many `Projects` and `Skills`.
+1. A `TeamMember` can have many `Projects`, `Skills`, `Colors`, and `Foods`.
 2. A `Project` belongs to a `TeamMember` and can have many `Tasks`.
 3. A `Task` belongs to a `Project`.
-4. A `Skill` belongs to a `TeamMember`.
+4. A `Skill`, `Color`, and `Food` belong to a `TeamMember`.
 
 ### Entity Relationship Diagram (ERD)
 ```mermaid
 erDiagram
-    TeamMember {
-        int Id
+    TEAM_MEMBER {
+        int Id PK
         string FullName
-        DateTime BirthDate
+        datetime BirthDate
         string CollegeProgram
         string YearInProgram
     }
-    Project {
-        int Id
+    COLOR {
+        int Id PK
+        string Name
+        string ColorOne
+        string ColorTwo
+        string ColorThree
+        string ColorFour
+        int TeamMemberId FK
+    }
+    FOOD {
+        int Id PK
+        string Name
+        string Breakfast
+        string Lunch
+        string Snack
+        string Dinner
+        int TeamMemberId FK
+    }
+    PROJECT {
+        int Id PK
         string Name
         string Description
-        int TeamMemberId
+        int TeamMemberId FK
     }
-    Skill {
-        int Id
+    SKILL {
+        int Id PK
         string Name
-        int TeamMemberId
+        int TeamMemberId FK
     }
-    Task {
-        int Id
+    TASK {
+        int Id PK
         string Title
         string Status
-        int ProjectId
+        int ProjectId FK
     }
-    TeamMember ||--o{ Project : has
-    TeamMember ||--o{ Skill : has
-    Project ||--o{ Task : includes
-    Task }o--|| Project : belongs_to
-    Skill }o--|| TeamMember : belongs_to
+    
+    TEAM_MEMBER ||--o{ COLOR : "has"
+    TEAM_MEMBER ||--o{ FOOD : "has"
+    TEAM_MEMBER ||--o{ PROJECT : "participates in"
+    TEAM_MEMBER ||--o{ SKILL : "has"
+    PROJECT ||--o{ TASK : "contains"
