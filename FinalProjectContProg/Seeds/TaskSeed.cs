@@ -1,6 +1,5 @@
 using FinalProjectContProg.Models;
 using FinalProjectContProg.Data;
-using System.Linq;
 
 namespace FinalProjectContProg.Seeds
 {
@@ -10,16 +9,16 @@ namespace FinalProjectContProg.Seeds
         {
             if (!context.Tasks.Any())
             {
-                var project = context.Projects.FirstOrDefault(); // Get the first project
+                var project = context.Projects.FirstOrDefault();
 
-                var task = new FinalProjectContProg.Models.Task
+                var tasks = new[]
                 {
-                    Title = "Develop Login Page",
-                    Status = "Pending",
-                    ProjectId = project?.Id ?? 1  // Default to the first project if none exist
+                    new FinalProjectContProg.Models.Task { Title = "Develop Login Page", Status = "Pending", ProjectId = project?.Id ?? 1 },
+                    new FinalProjectContProg.Models.Task { Title = "Design Database Schema", Status = "In Progress", ProjectId = project?.Id ?? 1 },
+                    new FinalProjectContProg.Models.Task { Title = "Implement API Endpoints", Status = "Completed", ProjectId = project?.Id ?? 1 }
                 };
 
-                context.Tasks.Add(task);
+                context.Tasks.AddRange(tasks);
                 context.SaveChanges();
             }
         }

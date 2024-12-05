@@ -11,5 +11,7 @@ namespace FinalProjectContProg.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<FinalProjectContProg.Models.Task> Tasks { get; set; }
         public DbSet<Skill> Skills { get; set; }
+        public DbSet<Food> Food { get; set; }
+        public DbSet<Color> Colors { get; set; }
     }
 }

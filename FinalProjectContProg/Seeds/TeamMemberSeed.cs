@@ -1,5 +1,6 @@
 using FinalProjectContProg.Models;
 using FinalProjectContProg.Data;
+using System;
 using System.Linq;
 
 namespace FinalProjectContProg.Seeds
@@ -10,15 +11,32 @@ namespace FinalProjectContProg.Seeds
         {
             if (!context.TeamMembers.Any())
             {
-                var teamMember = new TeamMember
+                var teamMembers = new[]
                 {
-                    FullName = "Alice Smith",
-                    BirthDate = new DateTime(2000, 5, 15),
-                    CollegeProgram = "Computer Science",
-                    YearInProgram = "Sophomore"
+                    new TeamMember
+                    {
+                        FullName = "Brian Faught",
+                        BirthDate = new DateTime(1997, 4, 1),
+                        CollegeProgram = "Information Technology",
+                        YearInProgram = "Sophomore"
+                    },
+                    new TeamMember
+                    {
+                        FullName = "Cameron Moreland",
+                        BirthDate = new DateTime(2005, 2, 1),
+                        CollegeProgram = "Cybersecurity",
+                        YearInProgram = "Sophomore"
+                    },
+                    new TeamMember
+                    {
+                        FullName = "Alexia Tincher",
+                        BirthDate = new DateTime(2003, 1, 1),
+                        CollegeProgram = "Information Technology",
+                        YearInProgram = "Sophomore"
+                    }
                 };
 
-                context.TeamMembers.Add(teamMember);
+                context.TeamMembers.AddRange(teamMembers);
                 context.SaveChanges();
             }
         }

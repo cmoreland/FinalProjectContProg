@@ -10,16 +10,16 @@ namespace FinalProjectContProg.Seeds
         {
             if (!context.Projects.Any())
             {
-                var teamMember = context.TeamMembers.FirstOrDefault(); // Assuming at least one team member exists
+                var teamMembers = context.TeamMembers.ToList();
 
-                var project = new Project
+                var projects = teamMembers.Select(member => new Project
                 {
-                    Name = "Project Alpha",
-                    Description = "A project focused on developing a web application.",
-                    TeamMemberId = teamMember?.Id ?? 1  // Default to 1 if no team members are found
-                };
+                    Name = $"{member.FullName}'s Project",
+                    Description = "A personalized project for team member.",
+                    TeamMemberId = member.Id
+                });
 
-                context.Projects.Add(project);
+                context.Projects.AddRange(projects);
                 context.SaveChanges();
             }
         }

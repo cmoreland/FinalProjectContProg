@@ -10,15 +10,16 @@ namespace FinalProjectContProg.Seeds
         {
             if (!context.Skills.Any())
             {
-                var teamMember = context.TeamMembers.FirstOrDefault(); // Get the first team member
+                var teamMembers = context.TeamMembers.ToList();
 
-                var skill = new Skill
+                var skills = teamMembers.SelectMany(member => new[]
                 {
-                    Name = "C#",
-                    TeamMemberId = teamMember?.Id ?? 1  // Default to first TeamMember if no team member found
-                };
+                    new Skill { Name = "C#", TeamMemberId = member.Id },
+                    new Skill { Name = "SQL", TeamMemberId = member.Id },
+                    new Skill { Name = "JavaScript", TeamMemberId = member.Id }
+                });
 
-                context.Skills.Add(skill);
+                context.Skills.AddRange(skills);
                 context.SaveChanges();
             }
         }
